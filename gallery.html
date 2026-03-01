@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Memories 📸</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Nunito:wght@300;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body {
+            background: #fdf5f6;
+            /* Very light pink background */
+            color: #b45454;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Nav */
+        .nav-bar {
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            background: rgba(253, 245, 246, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.1);
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: #d63384;
+            font-weight: 600;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+        }
+
+        .back-btn::before {
+            content: '← ';
+            margin-right: 5px;
+        }
+
+        .title {
+            font-family: 'Caveat', cursive;
+            font-size: 40px;
+            color: #ff6b81;
+        }
+
+        /* Polaroids Container */
+        .gallery-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 120px auto 50px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        /* The Polaroid style */
+        .polaroid {
+            background: white;
+            padding: 15px 15px 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform-origin: center;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            width: 280px;
+        }
+
+        /* Rotate them randomly */
+        .polaroid:nth-child(odd) {
+            transform: rotate(-3deg);
+        }
+
+        .polaroid:nth-child(even) {
+            transform: rotate(4deg);
+        }
+
+        .polaroid:nth-child(3n) {
+            transform: rotate(-5deg);
+        }
+
+        .polaroid:nth-child(4n) {
+            transform: rotate(2deg);
+        }
+
+        .polaroid:hover {
+            transform: scale(1.1) rotate(0deg);
+            box-shadow: 0 20px 40px rgba(255, 107, 129, 0.3);
+            z-index: 10;
+        }
+
+        /* Simulated Image Area */
+        .photo-box {
+            width: 100%;
+            height: 250px;
+            background: #ffe3e8;
+            /* Placeholder color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            color: #ffb3c6;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid #f0f0f0;
+        }
+
+        /* Replace placeholder with actual img */
+        .photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Beautiful handwritten caption */
+        .caption {
+            font-family: 'Caveat', cursive;
+            font-size: 26px;
+            text-align: center;
+            margin-top: 15px;
+            color: #4a4a4a;
+        }
+
+        /* Instruction Text */
+        .guidance {
+            text-align: center;
+            font-size: 16px;
+            margin: 80px auto 20px;
+            font-style: italic;
+            color: #a0a0a0;
+            max-width: 600px;
+        }
+
+        /* Full Screen Viewer (Modal) */
+        #modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 200;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        #modal img {
+            max-width: 80%;
+            max-height: 70vh;
+            border: 10px solid white;
+            border-radius: 5px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s;
+        }
+
+        #modal-caption {
+            font-family: 'Caveat', cursive;
+            color: white;
+            font-size: 35px;
+            margin-top: 20px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #ff6b81;
+            transform: scale(1.1);
+        }
+
+        @media(max-width: 768px) {
+            .polaroid {
+                width: 42%;
+                min-width: 250px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav-bar">
+        <a href="page2.html" class="back-btn">Back</a>
+        <div class="title">Our Beautiful Memories</div>
+        <div style="width: 50px;"></div> <!-- spacer -->
+    </nav>
+
+    <div class="guidance">
+        (To personalize: place your images in the folder and change the &lt;img src=""&gt; code tags in gallery.html)
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="gallery-container">
+
+        <!-- Photo 1 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <!-- Replace src with your image path! -->
+                <img src="images/image1.JPG">
+            </div>
+            <div class="caption">Meeeeeee</div>
+        </div>
+
+        <!-- Photo 2 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image2.JPG">
+            </div>
+            <div class="caption">Youuuuuu</div>
+        </div>
+
+        <!-- Photo 3 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image3.JPG">
+            </div>
+            <div class="caption">Weeeee</div>
+        </div>
+
+        <!-- Photo 4 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image4.jpg">
+            </div>
+            <div class="caption">Our endless adventures</div>
+        </div>
+
+        <!-- Photo 5 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image5.JPG">
+            </div>
+            <div class="caption">Look Mine</div>
+        </div>
+
+        <!-- Photo 6 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image6.JPG">
+            </div>
+            <div class="caption">Forever to go</div>
+        </div>
+
+        <!-- Photo 7 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image7.jpg">
+            </div>
+            <div class="caption">Scene Saliii</div>
+        </div>
+
+        <!-- Photo 8 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image8.jpg">
+            </div>
+            <div class="caption">Happy times</div>
+        </div>
+
+        <!-- Photo 9 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image9.jpg">
+            </div>
+            <div class="caption">Unforgettable</div>
+        </div>
+
+        <!-- Photo 10 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image10.jpg">
+            </div>
+            <div class="caption">Priceless moments</div>
+        </div>
+
+        <!-- Photo 11 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image11.jpg">
+            </div>
+            <div class="caption">Joy</div>
+        </div>
+
+        <!-- Photo 12 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image12.jpg">
+            </div>
+            <div class="caption">Smiles</div>
+        </div>
+
+        <!-- Photo 13 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image13.jpg">
+            </div>
+            <div class="caption">Beautiful day</div>
+        </div>
+
+        <!-- Photo 14 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image14.jpg">
+            </div>
+            <div class="caption">Love</div>
+        </div>
+
+        <!-- Photo 15 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image15.jpg">
+            </div>
+            <div class="caption">Together</div>
+        </div>
+
+        <!-- Photo 16 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image16.JPG">
+            </div>
+            <div class="caption">Our journey</div>
+        </div>
+
+        <!-- Photo 17 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image17.jpg">
+            </div>
+            <div class="caption">Sweetness</div>
+        </div>
+
+        <!-- Photo 18 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image18.jpg">
+            </div>
+            <div class="caption">Cherished</div>
+        </div>
+
+        <!-- Photo 19 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image19.JPG">
+            </div>
+            <div class="caption">Pure bliss</div>
+        </div>
+
+        <!-- Photo 20 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image20.JPG">
+            </div>
+            <div class="caption">Always</div>
+        </div>
+
+        <!-- Photo 21 -->
+        <div class="polaroid" onclick="openModal(this)">
+            <div class="photo-box">
+                <img src="images/image21.jpg">
+            </div>
+            <div class="caption">Perfect</div>
+        </div>
+
+    </div>
+
+    <!-- Fullscreen Modal -->
+    <div id="modal" onclick="closeModal()">
+        <button class="close-btn">&times;</button>
+        <img id="modal-img" src="" onclick="event.stopPropagation()">
+        <div id="modal-caption"></div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modal-img');
+        const modalCaption = document.getElementById('modal-caption');
+
+        function openModal(polaroid) {
+            // Find the image and caption inside the clicked polaroid
+            const img = polaroid.querySelector('img').src;
+            const text = polaroid.querySelector('.caption').innerText;
+
+            modalImg.src = img;
+            modalCaption.innerText = text;
+
+            // Show modal with animation
+            modal.style.display = 'flex';
+            // Force reflow
+            void modal.offsetWidth;
+            modal.classList.add('active');
+
+            // Slight pop-in effect for the image
+            modalImg.animate([
+                { transform: 'scale(0.8)', opacity: 0 },
+                { transform: 'scale(1)', opacity: 1 }
+            ], { duration: 300, easing: 'ease-out' });
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+
+            // Wait for CSS transition fade out
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        // Keyboard support for closing
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display === 'flex') {
+                closeModal();
+            }
+        });
+
+    </script>
+</body>
+
+</html>

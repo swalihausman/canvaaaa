@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do you love me? ❤️</title>
+    <!-- Alice Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Alice&family=Quicksand:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: url('images/bg 2.png') no-repeat center center fixed;
+            background-size: cover;
+            overflow: hidden;
+            font-family: 'Quicksand', sans-serif;
+            transition: opacity 1.5s ease;
+            position: relative;
+            color: #ab4e52;
+            text-align: center;
+        }
+
+        /* ── Soft Floating Hearts ── */
+        .bg-heart {
+            position: absolute;
+            color: #ab4e52;
+            animation: floatUp linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(1);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateY(-10vh) scale(0.6);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            max-width: 90%;
+            width: 450px;
+            margin-top: 250px;
+        }
+
+        h1 {
+            font-family: 'Alice', serif;
+            font-size: 38px;
+            margin-bottom: 30px;
+            color: #ab4e52;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 40px;
+            font-size: 18px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #yesBtn {
+            background-color: #ab4e52;
+            color: white;
+            box-shadow: 0 5px 15px rgba(171, 78, 82, 0.2);
+        }
+
+        #yesBtn:hover {
+            background-color: #8f3e42;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(171, 78, 82, 0.3);
+        }
+
+        /* ── Meter Section ── */
+        #meterSection {
+            display: none;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        .meter-bg {
+            width: 100%;
+            height: 25px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(171, 78, 82, 0.2);
+            position: relative;
+        }
+
+        .meter-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #bf5a5e, #ab4e52);
+            transition: width 0.1s linear;
+        }
+
+        #percentText {
+            margin-top: 15px;
+            font-size: 24px;
+            font-weight: 700;
+            font-family: 'Alice', serif;
+        }
+
+        /* ── Infinity Effect ── */
+        .infinity-symbol {
+            font-size: 60px;
+            display: none;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: #ab4e52;
+            text-shadow: 0 0 20px rgba(171, 78, 82, 0.3);
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .fade-out {
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container" id="mainContainer">
+        <h1 id="questionText">Want to know how much I love you?</h1>
+        <div class="btn-container" id="btnGroup">
+            <button id="yesBtn" onclick="startMeter()">Yes!</button>
+        </div>
+
+        <div id="meterSection">
+            <div class="meter-bg">
+                <div class="meter-fill" id="meterFill"></div>
+            </div>
+            <div id="percentText">0%</div>
+            <div class="infinity-symbol" id="infinitySymbol">∞</div>
+        </div>
+    </div>
+
+    <script>
+        // ── Background Hearts ──
+        (function createBgHearts() {
+            for (let i = 0; i < 15; i++) {
+                const h = document.createElement('div');
+                h.classList.add('bg-heart');
+                h.textContent = '♥';
+                h.style.left = Math.random() * 100 + 'vw';
+                h.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                const dur = Math.random() * 10 + 8;
+                h.style.animationDuration = dur + 's';
+                h.style.animationDelay = '-' + (Math.random() * dur) + 's';
+                document.body.appendChild(h);
+            }
+        })();
+
+        function startMeter() {
+            document.getElementById('btnGroup').style.display = 'none';
+            document.getElementById('questionText').innerText = "Calculating my love...";
+            document.getElementById('meterSection').style.display = 'block';
+
+            let fill = document.getElementById('meterFill');
+            let text = document.getElementById('percentText');
+            let infinity = document.getElementById('infinitySymbol');
+            let width = 0;
+
+            let interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    text.style.display = 'none';
+                    infinity.style.display = 'block';
+                    document.getElementById('questionText').innerText = "It's beyond numbers!";
+
+                    setTimeout(() => {
+                        document.body.classList.add('fade-out');
+                        setTimeout(() => {
+                            window.location.href = 'page2.html';
+                        }, 1000);
+                    }, 2000);
+                } else {
+                    width += Math.random() * 2.5;
+                    if (width > 100) width = 100;
+                    fill.style.width = width + '%';
+                    text.innerText = Math.floor(width) + '%';
+                }
+            }, 50);
+        }
+    </script>
+</body>
+
+</html>

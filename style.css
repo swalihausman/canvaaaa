@@ -1,0 +1,77 @@
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(180deg,#f8cfc4,#fde7df);
+    overflow:hidden;
+    position:relative;
+}
+
+/* Minimal Dim Background Hearts */
+.bg-hearts span{
+    position:absolute;
+    font-size:70px;
+    color:#ff9bb0;
+    opacity:0.06;
+    animation:float 10s infinite ease-in-out;
+}
+
+.bg-hearts span:nth-child(1){ top:15%; left:20%; }
+.bg-hearts span:nth-child(2){ bottom:20%; right:25%; }
+.bg-hearts span:nth-child(3){ top:40%; right:10%; }
+.bg-hearts span:nth-child(4){ bottom:10%; left:30%; }
+
+@keyframes float{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-20px); }
+}
+
+/* Single Heart */
+.heart-container{
+    width:240px;
+    cursor:pointer;
+    z-index:2;
+}
+
+.heart{
+    width:100%;
+    fill:url(#grad);
+    animation:heartbeat 1.5s infinite;
+    transition:transform 0.8s ease;
+}
+
+/* Apply Gradient */
+.heart path{
+    fill:linear-gradient(145deg,#ff8fa3,#ff4d6d);
+    fill:#ff5c7a;
+}
+
+/* Heartbeat */
+@keyframes heartbeat{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.1); }
+}
+
+/* Burst Hearts */
+.small-heart{
+    position:absolute;
+    color:#ff6b81;
+    font-size:22px;
+    animation:explode 1s ease forwards;
+}
+
+@keyframes explode{
+    0%{ opacity:1; transform:translate(0,0) scale(1); }
+    100%{ opacity:0; transform:translate(var(--x),var(--y)) scale(1.6); }
+}
+
+/* Title */
+.title{
+    position:absolute;
+    bottom:80px;
+    font-family:'Allura',cursive;
+    font-size:42px;
+    color:#b45454;
+}

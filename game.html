@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reach My Heart 💖</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Nunito:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #ff6b81;
+            --secondary: #ff8fab;
+            --text-color: #b45454;
+            --bg-top: #f8cfc4;
+            --bg-bottom: #fde7df;
+            --obstacle-color: #e58b8b;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+            font-family: 'Nunito', sans-serif;
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .title {
+            margin-top: 20px;
+            text-align: center;
+            font-family: 'Alex Brush', cursive;
+            font-size: 50px;
+            z-index: 10;
+            text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.7);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 80%;
+            max-width: 600px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            transition: width 0.2s linear;
+        }
+
+        .instructions {
+            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px 20px;
+            border-radius: 20px;
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Game Container */
+        .game-area {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            flex-grow: 1;
+            margin-top: 10px;
+            overflow: hidden;
+            border-bottom: 4px solid var(--primary);
+        }
+
+        /* Game Elements */
+        .entity {
+            position: absolute;
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        #player {
+            width: 60px;
+            height: 60px;
+            background-color: var(--secondary);
+            border: 3px solid white;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            background-image: url('images/image16.JPG');
+            background-size: cover;
+            background-position: top;
+            transition: height 0.1s, width 0.1s;
+            transform-origin: bottom center;
+        }
+
+        #goal {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary);
+            border: 4px solid white;
+            right: 50px;
+            /* Fixed to the right side */
+            bottom: 0px;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            background-image: url('images/image4.jpg');
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 0 20px var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 20px var(--primary);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 40px var(--primary);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px var(--primary);
+            }
+        }
+
+        .obstacle {
+            position: absolute;
+            width: 40px;
+            background: var(--obstacle-color);
+            border-radius: 10px;
+            z-index: 3;
+            box-shadow: -3px 5px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .obstacle::after {
+            content: '💔';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            opacity: 0.8;
+        }
+
+        /* Game Over / Success screens */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .overlay h2 {
+            font-family: 'Alex Brush', cursive;
+            font-size: 60px;
+            margin: 0 0 20px 0;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .overlay button {
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background: var(--primary);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 107, 129, 0.4);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .overlay button:hover {
+            transform: scale(1.05);
+            background: #ff4d6d;
+        }
+
+        /* Floating background hearts */
+        .bg-heart {
+            position: absolute;
+            color: #e58b8b;
+            font-size: 24px;
+            opacity: 0;
+            z-index: 0;
+            animation: floatUp 8s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.3;
+            }
+
+            90% {
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translateY(-10vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="title">Run To My Heart 💕</div>
+
+    <div class="instructions">
+        Press ⬆️ to Jump | Press ⬇️ to Slide
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="game-area" id="gameArea">
+        <div id="player" class="entity"></div>
+        <div id="goal" class="entity"></div>
+    </div>
+
+    <!-- Modals -->
+    <div class="overlay" id="gameOverScreen">
+        <h2>Oh nooo 💔<br>You tripped!</h2>
+        <button onclick="startGame()">Try Again to Reach Me!</button>
+    </div>
+
+    <div class="overlay" id="victoryScreen">
+        <h2>You Reached Me! 💖<br><span style="font-family: 'Nunito', sans-serif; font-size: 30px;">Forever With You
+                ♾️</span></h2>
+        <button onclick="window.location.href='puzzle.html'">Next Game ✨</button>
+    </div>
+
+    <script>
+        // Game Elements
+        const gameArea = document.getElementById('gameArea');
+        const playerEl = document.getElementById('player');
+        const progressBar = document.getElementById('progressBar');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const victoryScreen = document.getElementById('victoryScreen');
+
+        // Game Constants
+        const GRAVITY = 1.1;
+        const JUMP_POWER = 18.5;
+        const GAME_SPEED = 9.5;
+        const GROUND_Y = 20; // Padding from bottom
+        const TOTAL_DISTANCE = 4500; // Increased distance
+
+        // Game State
+        let animationId;
+        let isPlaying = false;
+        let distance = 0;
+        let frames = 0;
+
+        let player = {
+            x: 50,
+            y: GROUND_Y,
+            w: 60,
+            h: 60,
+            vy: 0,
+            isJumping: false,
+            isSliding: false
+        };
+
+        let obstacles = [];
+
+        // Inputs
+        let keys = {
+            ArrowUp: false,
+            ArrowDown: false,
+            Space: false
+        };
+
+        window.addEventListener('keydown', e => {
+            if (e.code === 'ArrowUp' || e.code === 'Space') keys.ArrowUp = true;
+            if (e.code === 'ArrowDown') keys.ArrowDown = true;
+        });
+
+        window.addEventListener('keyup', e => {
+            if (e.code === 'ArrowUp' || e.code === 'Space') keys.ArrowUp = false;
+            if (e.code === 'ArrowDown') keys.ArrowDown = false;
+        });
+
+        // Touch support for mobile
+        gameArea.addEventListener('touchstart', (e) => {
+            const touchY = e.touches[0].clientY;
+            const screenHeight = window.innerHeight;
+            if (touchY < screenHeight / 2) {
+                keys.ArrowUp = true;
+            } else {
+                keys.ArrowDown = true;
+            }
+        });
+
+        gameArea.addEventListener('touchend', () => {
+            keys.ArrowUp = false;
+            keys.ArrowDown = false;
+        });
+
+        function spawnObstacle() {
+            const type = Math.random() > 0.5 ? 'high' : 'low';
+            // low: must jump over (on ground)
+            // high: must slide under (floating)
+
+            let obs = {
+                id: 'obs_' + Date.now() + Math.random(),
+                x: gameArea.clientWidth + 50,
+                w: 40,
+                h: 70,
+                type: type,
+                y: type === 'low' ? GROUND_Y : GROUND_Y + 70,
+                passed: false,
+                el: null
+            };
+
+            const el = document.createElement('div');
+            el.className = 'obstacle';
+            el.id = obs.id;
+            el.style.width = obs.w + 'px';
+            el.style.height = obs.h + 'px';
+            gameArea.appendChild(el);
+
+            obs.el = el;
+            obstacles.push(obs);
+        }
+
+        function update() {
+            if (!isPlaying) return;
+
+            frames++;
+            distance += GAME_SPEED;
+
+            // Player physics (Jump)
+            if (keys.ArrowUp && !player.isJumping) {
+                player.vy = JUMP_POWER;
+                player.isJumping = true;
+            }
+
+            player.y += player.vy;
+
+            if (player.y > GROUND_Y) {
+                player.vy -= GRAVITY;
+            } else {
+                player.y = GROUND_Y;
+                player.vy = 0;
+                player.isJumping = false;
+            }
+
+            // Sliding
+            if (keys.ArrowDown && !player.isJumping) {
+                player.isSliding = true;
+                player.h = 30; // Duck down
+                playerEl.style.borderRadius = '30px';
+            } else {
+                player.isSliding = false;
+                player.h = 60; // Stand up
+                playerEl.style.borderRadius = '50%';
+            }
+
+            // Apply Player POS
+            playerEl.style.bottom = player.y + 'px';
+            playerEl.style.left = player.x + 'px';
+            playerEl.style.height = player.h + 'px';
+
+            // Obstacle Logic
+            // Spawn obstacles only if we haven't reached the end
+            if (distance < TOTAL_DISTANCE - 500) {
+                // Spawn logic - intensified
+                if (frames % 65 === 0) {
+                    spawnObstacle();
+                } else if (frames % 40 === 0 && Math.random() > 0.5) {
+                    spawnObstacle();
+                }
+            }
+
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let obs = obstacles[i];
+                obs.x -= GAME_SPEED;
+                obs.el.style.left = obs.x + 'px';
+                obs.el.style.bottom = obs.y + 'px';
+
+                // Collision Detection
+                // Margins to make the game slightly more forgiving
+                let pRight = player.x + player.w - 10;
+                let pLeft = player.x + 10;
+                let pTop = player.y + player.h - 10;
+                let pBottom = player.y + 10;
+
+                let oRight = obs.x + obs.w - 5;
+                let oLeft = obs.x + 5;
+                let oTop = obs.y + obs.h - 5;
+                let oBottom = obs.y + 5;
+
+                if (pRight > oLeft && pLeft < oRight && pTop > oBottom && pBottom < oTop) {
+                    gameOver();
+                    return;
+                }
+
+                // Remove off-screen obstacles
+                if (obs.x < -100) {
+                    obs.el.remove();
+                    obstacles.splice(i, 1);
+                }
+            }
+
+            // Progress Bar
+            let progress = Math.min((distance / TOTAL_DISTANCE) * 100, 100);
+            progressBar.style.width = progress + '%';
+
+            // Win Condition
+            if (distance >= TOTAL_DISTANCE) {
+                winGame();
+                return;
+            }
+
+            animationId = requestAnimationFrame(update);
+        }
+
+        function startGame() {
+            // Reset state
+            cancelAnimationFrame(animationId);
+            gameOverScreen.classList.remove('active');
+            victoryScreen.classList.remove('active');
+
+            // Remove old obstacles
+            obstacles.forEach(obs => obs.el.remove());
+            obstacles = [];
+
+            distance = 0;
+            frames = 0;
+            isPlaying = true;
+
+            player.y = GROUND_Y;
+            player.vy = 0;
+            player.isJumping = false;
+            player.isSliding = false;
+            player.x = 50;
+            playerEl.style.transition = 'height 0.1s, width 0.1s';
+
+            progressBar.style.width = '0%';
+
+            update();
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            gameOverScreen.classList.add('active');
+        }
+
+        function winGame() {
+            isPlaying = false;
+
+            // Final romantic animation!
+            playerEl.style.transition = 'left 2s ease-in-out, bottom 1s ease';
+            playerEl.style.left = 'calc(100% - 150px)'; // Move to goal
+            playerEl.style.bottom = GROUND_Y + 'px';
+
+            // Trigger small heart explosion after moving
+            setTimeout(() => {
+                triggerHearts();
+                victoryScreen.classList.add('active');
+            }, 2000);
+        }
+
+        function triggerHearts() {
+            for (let i = 0; i < 30; i++) {
+                setTimeout(createHeart, i * 50);
+            }
+        }
+
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("bg-heart");
+            heart.innerHTML = "❤";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = (Math.random() * 3 + 5) + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 8000);
+        }
+
+        // Background floating hearts loop
+        setInterval(createHeart, 1500);
+
+        // Initial Start
+        startGame();
+
+    </script>
+
+</body>
+
+</html>

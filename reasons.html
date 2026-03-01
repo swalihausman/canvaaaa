@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reasons I Love You 💌</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Nunito:wght@300;600;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fdf5f6, #ffe9f3);
+            color: #b45454;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Nav */
+        .nav-bar {
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            background: rgba(253, 245, 246, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: #d63384;
+            font-weight: 600;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+        }
+
+        .back-btn::before {
+            content: '← ';
+            margin-right: 5px;
+        }
+
+        .title {
+            font-family: 'Caveat', cursive;
+            font-size: 38px;
+            color: #ff6b81;
+        }
+
+        /* Header */
+        .hero {
+            margin-top: 100px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hero h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 55px;
+            color: #d63384;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #e58b8b;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        /* 3D Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto 100px;
+            perspective: 1000px;
+            /* Required for 3D effect */
+        }
+
+        /* The Flip Card Container */
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        /* The inner card holding front and back */
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        /* Hover or Click triggers the flip */
+        .flip-card:hover .flip-card-inner,
+        .flip-card.active .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        /* Shared Flip Card styling */
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            /* Safari */
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(255, 182, 193, 0.3);
+        }
+
+        /* Front Side */
+        .flip-card-front {
+            background: white;
+            border: 2px solid #fff0f3;
+            color: #ff8fab;
+        }
+
+        .flip-card-front .number {
+            font-family: 'Caveat', cursive;
+            font-size: 80px;
+            color: #ffb3c6;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .flip-card-front h2 {
+            font-size: 22px;
+            color: #d63384;
+        }
+
+        /* Back Side */
+        .flip-card-back {
+            background: linear-gradient(135deg, #ff6b81, #ff8fab);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-back p {
+            font-size: 22px;
+            font-family: 'Caveat', cursive;
+            line-height: 1.4;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .flip-card-back .icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav-bar">
+        <a href="page2.html" class="back-btn">Back</a>
+        <div class="title">My Reasons</div>
+        <div style="width: 50px;"></div>
+    </nav>
+
+    <div class="hero">
+        <h1>10 Reasons Why...</h1>
+        <p>(Hover or tap each card to reveal my heart)</p>
+    </div>
+
+    <!-- The Flip Card Grid -->
+    <div class="grid">
+
+        <!-- Card 1 -->
+        <div class="flip-card" onclick="this.classList.toggle('active')">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <div class="number">1</div>
+                    <h2>How You Care</h2>
+                </div>
+                <div class="flip-card-back">
+                    <div class="icon">🫂</div>
+                    <p>The way you care for me is unlike anything I've ever known. It makes me feel so safe and loved.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="flip-card" onclick="this.classList.toggle('active')">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <div class="number">2</div>
+                    <h2>Personality</h2>
+                </div>
+                <div class="flip-card-back">
+                    <div class="icon">✨</div>
+                    <p>Your behavior, your Deen, and everything about who you are made me fall for you completely.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="flip-card" onclick="this.classList.toggle('active')">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <div class="number">3</div>
+                    <h2>The Way You Smile</h2>
+                </div>
+                <div class="flip-card-back">
+                    <div class="icon">😊</div>
+                    <p>Your smile is literally the most beautiful thing I've ever seen. It lights up even my darkest
+                        days.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="flip-card" onclick="this.classList.toggle('active')">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <div class="number">4</div>
+                    <h2>Support</h2>
+                </div>
+                <div class="flip-card-back">
+                    <div class="icon">⭐</div>
+                    <p>You believe in me even when I don't believe in myself. Your support is my greatest strength.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="flip-card" onclick="this.classList.toggle('active')">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <div class="number">5</div>
+                    <h2>Our Weirdness</h2>
+                </div>
+                <div class="flip-card-back">
+                    <div class="icon">🤪</div>
+                    <p>I love that you are always being you, never changing. Being yourself makes me happy, and I can be
+                        myself too!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="flip-card" onclick="this.classList.toggle('active')">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <div class="number">6</div>
+                    <h2>Real Gem</h2>
+                </div>
+                <div class="flip-card-back">
+                    <div class="icon">💎</div>
+                    <p>In this worst generation, I found a treasure who is single for 24 years and a real Sigma! 😂</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 7 -->
+        <div class="flip-card" onclick="this.classList.toggle('active')">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <div class="number">7</div>
+                    <h2>Your Love</h2>
+                </div>
+                <div class="flip-card-back">
+                    <div class="icon">❤️</div>
+                    <p>Your love towards me makes me fall for you more each second. It is the most precious gift I have.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 8 -->
+        <div class="flip-card" onclick="this.classList.toggle('active')">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <div class="number">8</div>
+                    <h2>Little Things</h2>
+                </div>
+                <div class="flip-card-back">
+                    <div class="icon">🌸</div>
+                    <p>The way you notice and remember every little detail about me... it means the world to me.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 9 -->
+        <div class="flip-card" onclick="this.classList.toggle('active')">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <div class="number">9</div>
+                    <h2>Your Patience</h2>
+                </div>
+                <div class="flip-card-back">
+                    <div class="icon">⏳</div>
+                    <p>Even though I'm an avoiding Salii kuttyyy, you always cared for me and stayed without saying
+                        anything.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 10 -->
+        <div class="flip-card" onclick="this.classList.toggle('active')">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <div class="number">10</div>
+                    <h2>You Are You</h2>
+                </div>
+                <div class="flip-card-back">
+                    <div class="icon">✨</div>
+                    <p>Simply: you are just you, and that is everything I ever wanted. I love YOU.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

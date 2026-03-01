@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Love Puzzle 🧩</title>
+    <link href="https://fonts.googleapis.com/css2?family=Alice&family=Quicksand:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #fdf2f4;
+            font-family: 'Quicksand', sans-serif;
+            color: #ab4e52;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            max-width: 95%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        h1 {
+            font-family: 'Alice', serif;
+            font-size: 28px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2px;
+            background: #ab4e52;
+            padding: 2px;
+            border-radius: 8px;
+            user-select: none;
+        }
+
+        .cell {
+            width: 30px;
+            height: 30px;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .cell.selected {
+            background: #ffcbd1;
+        }
+
+        .cell.found {
+            background: #ab4e52;
+            color: white;
+        }
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-weight: 600;
+        }
+
+        .hints-section {
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            border-top: 1px solid #ab4e52;
+            padding-top: 10px;
+            font-size: 14px;
+        }
+
+        .hint-item {
+            margin-bottom: 5px;
+        }
+
+        .hint-item.done {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .overlay h2 {
+            font-family: 'Alice', serif;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 30px;
+            background: #ab4e52;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+        }
+
+        /* Bg Hearts from index */
+        .bg-heart {
+            position: absolute;
+            color: #ab4e52;
+            animation: floatUp linear infinite;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(1.0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.3;
+            }
+
+            90% {
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translateY(-10vh) scale(0.6);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .cell {
+                width: 25px;
+                height: 25px;
+                font-size: 14px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Find 1 Hidden Word 🔍</h1>
+        <div class="info">
+            <span>Found: <span id="foundCount">0</span>/7</span>
+            <span>Target: 7</span>
+        </div>
+
+        <div class="grid-container" id="grid"></div>
+
+        <div class="hints-section" id="hints">
+            <div class="hint-item" id="hint-LINDT">🍫 Favourite chocolate of mine(5)</div>
+            <div class="hint-item" id="hint-TOBLERONE">🍫 Favourite chocolate of salii kuttyy (9)</div>
+            <div class="hint-item" id="hint-RONALDO">⚽ Favourite player (7)</div>
+            <div class="hint-item" id="hint-SHAWARMA">🌯 Favourite food of Salii kuttyy (8)</div>
+            <div class="hint-item" id="hint-PATHIL">🍲 Favourite food of Mine(6)</div>
+            <div class="hint-item" id="hint-LOVE">What you have for her (4)</div>
+            <div class="hint-item" id="hint-MINE">What She calls you (4)</div>
+            <div class="hint-item" id="hint-SALIKUTTY">🐱 What you call her (9)</div>
+            <div class="hint-item" id="hint-BADMINTON">🏸 Favourite game (10)</div>
+            <div class="hint-item" id="hint-ARABICHI">🏠 Favourite topic in my bake (8)</div>
+        </div>
+    </div>
+
+    <div class="overlay" id="winOverlay">
+        <h2>You Did It! 🎉</h2>
+        <p style="margin-bottom: 20px;">You've found enough words to unlock the next part!</p>
+        <button onclick="window.location.href='page3.html'">Next Surprise ✨</button>
+    </div>
+
+    <script>
+        const words = ["LINDT", "TOBLERONE", "RONALDO", "SHAWARMA", "PATHIL", "LOVE", "MINE", "SALIKUTTY", "BADMINTON", "ARABICHI"];
+        const gridSize = 12;
+        const grid = Array(gridSize).fill().map(() => Array(gridSize).fill(''));
+        let foundWords = [];
+        let selecting = false;
+        let selection = [];
+
+        // ── Background Hearts ──
+        setInterval(() => {
+            const h = document.createElement('div');
+            h.classList.add('bg-heart');
+            h.textContent = '♥';
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            h.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 10000);
+        }, 1000);
+
+        // Place words in grid
+        words.forEach(word => {
+            let placed = false;
+            while (!placed) {
+                const direction = Math.random() > 0.5 ? 'H' : 'V';
+                const row = Math.floor(Math.random() * (gridSize - (direction === 'V' ? word.length : 0)));
+                const col = Math.floor(Math.random() * (gridSize - (direction === 'H' ? word.length : 0)));
+
+                let canPlace = true;
+                for (let i = 0; i < word.length; i++) {
+                    const r = direction === 'V' ? row + i : row;
+                    const c = direction === 'H' ? col + i : col;
+                    if (grid[r][c] !== '' && grid[r][c] !== word[i]) {
+                        canPlace = false;
+                        break;
+                    }
+                }
+
+                if (canPlace) {
+                    for (let i = 0; i < word.length; i++) {
+                        const r = direction === 'V' ? row + i : row;
+                        const c = direction === 'H' ? col + i : col;
+                        grid[r][c] = word[i];
+                    }
+                    placed = true;
+                }
+            }
+        });
+
+        // Fill empty spots
+        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        for (let r = 0; r < gridSize; r++) {
+            for (let c = 0; c < gridSize; c++) {
+                if (grid[r][c] === '') {
+                    grid[r][c] = alphabet[Math.floor(Math.random() * alphabet.length)];
+                }
+            }
+        }
+
+        // Render grid
+        const gridEl = document.getElementById('grid');
+        for (let r = 0; r < gridSize; r++) {
+            for (let c = 0; c < gridSize; c++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.textContent = grid[r][c];
+                cell.dataset.r = r;
+                cell.dataset.c = c;
+
+                cell.addEventListener('mousedown', () => startSelection(r, c, cell));
+                cell.addEventListener('mouseover', () => updateSelection(r, c, cell));
+                cell.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    startSelection(r, c, cell);
+                });
+                gridEl.appendChild(cell);
+            }
+        }
+
+        window.addEventListener('mouseup', endSelection);
+        window.addEventListener('touchend', endSelection);
+
+        function startSelection(r, c, el) {
+            selecting = true;
+            selection = [{ r, c, el }];
+            el.classList.add('selected');
+        }
+
+        function updateSelection(r, c, el) {
+            if (!selecting) return;
+            if (selection.some(s => s.r === r && s.c === c)) return;
+            selection.push({ r, c, el });
+            el.classList.add('selected');
+        }
+
+        function endSelection() {
+            if (!selecting) return;
+            selecting = false;
+
+            const selectedWord = selection.map(s => s.el.textContent).join('');
+            const reversedWord = selectedWord.split('').reverse().join('');
+
+            let found = null;
+            if (words.includes(selectedWord) && !foundWords.includes(selectedWord)) found = selectedWord;
+            else if (words.includes(reversedWord) && !foundWords.includes(reversedWord)) found = reversedWord;
+
+            if (found) {
+                foundWords.push(found);
+                selection.forEach(s => s.el.classList.add('found'));
+                document.getElementById('foundCount').textContent = foundWords.length;
+                document.getElementById('hint-' + found).classList.add('done');
+
+                if (foundWords.length >= 7) {
+                    setTimeout(() => {
+                        document.getElementById('winOverlay').style.display = 'flex';
+                    }, 500);
+                }
+            }
+
+            selection.forEach(s => s.el.classList.remove('selected'));
+            selection = [];
+        }
+
+        // Touch move handling for mobile
+        gridEl.addEventListener('touchmove', (e) => {
+            if (!selecting) return;
+            const touch = e.touches[0];
+            const el = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (el && el.classList.contains('cell')) {
+                const r = parseInt(el.dataset.r);
+                const c = parseInt(el.dataset.c);
+                updateSelection(r, c, el);
+            }
+        });
+    </script>
+</body>
+
+</html>

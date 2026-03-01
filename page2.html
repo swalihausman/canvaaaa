@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Universe of Love 🌌</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Nunito:wght@300;600;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8cfc4, #fde7df);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            color: #b45454;
+            padding: 40px 20px;
+        }
+
+        /* Animated Title */
+        h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 55px;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #d63384;
+            text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.8);
+            animation: floatText 3s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        @keyframes floatText {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Glassmorphic Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1000px;
+            z-index: 10;
+        }
+
+        /* Individual Gift Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 30px 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #b45454;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 15px 35px rgba(255, 107, 129, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 220px;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-15px) scale(1.03);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 25px 45px rgba(255, 107, 129, 0.3);
+            border-color: #ff8fab;
+        }
+
+        /* Icon Container */
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff8fab, #ffb3c6);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 35px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(255, 143, 171, 0.4);
+            transition: transform 0.4s;
+            color: white;
+        }
+
+        .card:hover .icon-circle {
+            transform: rotate(15deg) scale(1.1);
+            background: linear-gradient(135deg, #ff6b81, #ff8fab);
+        }
+
+        .card h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .card p {
+            font-size: 15px;
+            opacity: 0.8;
+            font-weight: 600;
+        }
+
+        /* Floating Background Elements */
+        .bg-element {
+            position: fixed;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .blob1 {
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(255, 143, 171, 0.3) 0%, rgba(255, 143, 171, 0) 70%);
+        }
+
+        .blob2 {
+            bottom: -20%;
+            right: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(255, 194, 209, 0.4) 0%, rgba(255, 194, 209, 0) 70%);
+        }
+
+        /* Responsive Tweaks */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 50px;
+            }
+
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                min-height: 180px;
+                padding: 20px;
+            }
+
+            .icon-circle {
+                width: 60px;
+                height: 60px;
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Soft glowing aesthetic blobs in the background -->
+    <div class="bg-element blob1"></div>
+    <div class="bg-element blob2"></div>
+
+    <h1>Choose any ♡</h1>
+
+    <div class="grid-container">
+
+        <!-- 1. The Game -->
+        <a href="game.html" class="card">
+            <div class="icon-circle">🎮</div>
+            <h2>Reach My Heart</h2>
+            <p>Help me jump into your arms</p>
+        </a>
+
+        <!-- 2. The Calculator -->
+        <a href="calculator.html" class="card">
+            <div class="icon-circle">✨</div>
+            <h2>Love Calculator</h2>
+            <p>Let destiny calculate our match</p>
+        </a>
+
+        <!-- 3. The Gallery -->
+        <a href="gallery.html" class="card">
+            <div class="icon-circle">📸</div>
+            <h2>Our Memories</h2>
+            <p>A wall of our favorite moments</p>
+        </a>
+
+        <!-- 4. The Timeline -->
+        <a href="timeline.html" class="card">
+            <div class="icon-circle">⏳</div>
+            <h2>Our Timeline</h2>
+            <p>The journey of our love story</p>
+        </a>
+
+        <!-- 5. Reasons Why -->
+        <a href="reasons.html" class="card">
+            <div class="icon-circle">💌</div>
+            <h2>Reasons Why</h2>
+            <p>10 reasons why I love you</p>
+        </a>
+
+        <!-- 6. Letters -->
+        <a href="letters.html" class="card">
+            <div class="icon-circle">📜</div>
+            <h2>Secret Letters</h2>
+            <p>A message straight from my soul</p>
+        </a>
+
+    </div>
+
+    <script>
+        // Subtle floating hearts effect behind the glass
+        function createGlassHeart() {
+            const heart = document.createElement("div");
+            heart.style.position = "fixed";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.top = "110vh";
+            heart.innerHTML = "🤍";
+            heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+            heart.style.opacity = Math.random() * 0.4 + 0.1;
+            heart.style.zIndex = 2; // Under the cards
+            heart.style.pointerEvents = "none";
+
+            // Animation via JS for performance
+            heart.animate([
+                { transform: 'translateY(0) rotate(0deg)' },
+                { transform: `translateY(-120vh) rotate(${Math.random() * 360}deg)` }
+            ], {
+                duration: Math.random() * 6000 + 8000,
+                easing: 'linear',
+                fill: 'forwards'
+            }).onfinish = () => heart.remove();
+
+            document.body.appendChild(heart);
+        }
+
+        setInterval(createGlassHeart, 1000);
+    </script>
+
+</body>
+
+</html>
